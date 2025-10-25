@@ -1,0 +1,7 @@
+requests
+bs4
+mcp
+feedparser
+beautifulsoup4
+PyPDF2
+
