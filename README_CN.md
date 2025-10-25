@@ -29,14 +29,77 @@
 - FastMCP库
 - 互联网连接
 
-### 已完成的安装
+### 安装步骤
 
-您的系统已经完成安装，包括：
+1. 克隆或下载此仓库
+2. 创建虚拟环境：`python -m venv venv`
+3. 激活虚拟环境：
+   - Windows: `venv\Scripts\activate`
+   - Mac/Linux: `source venv/bin/activate`
+4. 安装依赖：`pip install -r requirements.txt`
 
-✅ Python虚拟环境已创建  
-✅ 所有依赖已安装  
-✅ MCP配置已更新  
-✅ 所有适配器测试通过  
+### MCP配置
+
+本项目提供**两个MCP服务器**，功能互补：
+
+1. **`academic`** - 基础搜索、元数据检索和PDF下载（5个数据库）
+2. **`academic-research`** - 高级功能：引用分析、影响力评估、本地PDF分析、完整研究工作流
+
+将以下配置添加到MCP设置文件（`~/.cursor/mcp.json` 或 `C:\Users\YOUR_USERNAME\.cursor\mcp.json`）：
+
+**Windows配置：**
+```json
+{
+  "mcpServers": {
+    "academic": {
+      "command": "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\academic_server.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    },
+    "academic-research": {
+      "command": "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\academic_research_advanced.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+**Mac/Linux配置：**
+```json
+{
+  "mcpServers": {
+    "academic": {
+      "command": "/path/to/Academic-MCP-Server/venv/bin/python",
+      "args": [
+        "/path/to/Academic-MCP-Server/academic_server.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    },
+    "academic-research": {
+      "command": "/path/to/Academic-MCP-Server/venv/bin/python",
+      "args": [
+        "/path/to/Academic-MCP-Server/academic_research_advanced.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    }
+  }
+}
+```
+
+**注意：** 请将 `YOUR_USERNAME` 和 `path/to` 替换为实际路径。
 
 ### 如何使用
 
@@ -64,7 +127,9 @@
 
 ## 📊 可用的MCP工具
 
-### 1. search_papers
+### 服务器：`academic`（基础搜索与检索）
+
+#### 1. search_papers
 按关键词搜索论文
 
 **参数：**
@@ -77,7 +142,7 @@
 search_papers(keywords="机器学习", source="all", num_results=15)
 ```
 
-### 2. search_papers_advanced
+#### 2. search_papers_advanced
 多参数高级搜索
 
 **参数：**
@@ -102,7 +167,7 @@ search_papers_advanced(
 )
 ```
 
-### 3. get_paper_metadata
+#### 3. get_paper_metadata
 获取特定论文的详细元数据
 
 **参数：**
@@ -114,7 +179,7 @@ search_papers_advanced(
 get_paper_metadata(identifier="40883768", source="pubmed")
 ```
 
-### 4. download_paper_pdf
+#### 4. download_paper_pdf
 下载论文PDF
 
 **参数：**
@@ -126,7 +191,7 @@ get_paper_metadata(identifier="40883768", source="pubmed")
 download_paper_pdf(identifier="2301.00001", source="arxiv")
 ```
 
-### 5. list_available_sources
+#### 5. list_available_sources
 列出所有可用的数据源
 
 **返回：**
@@ -134,12 +199,84 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 ["pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"]
 ```
 
-### 6. deep_paper_analysis
+#### 6. deep_paper_analysis
 生成全面的论文分析提示
 
 **参数：**
 - `identifier` (str): 论文标识符
 - `source` (str): 数据源
+
+### 服务器：`academic-research`（高级分析与研究）
+
+#### 1. analyze_citation_network
+分析论文的引用网络
+
+**参数：**
+- `paper_id` (str): 论文标识符（DOI、PMID等）
+- `source` (str): 数据源（默认："semantic_scholar"）
+- `max_depth` (int): 网络深度1-3层（默认：2）
+
+#### 2. evaluate_paper_impact
+评估论文的学术影响力
+
+**参数：**
+- `paper_id` (str): 论文标识符
+- `source` (str): 数据源（默认："semantic_scholar"）
+
+#### 3. recommend_related_papers
+基于多种策略推荐相关文献
+
+**参数：**
+- `paper_id` (str): 源论文标识符
+- `source` (str): 数据源（默认："semantic_scholar"）
+- `num_recommendations` (int): 推荐数量（默认：10）
+- `strategy` (str): 推荐策略 - "comprehensive"、"citations"、"similar"或"influential"
+
+#### 4. research_workflow_complete
+**⭐ 推荐核心功能** - 完整研究工作流：检索 → 分析 → 阅读 → 总结
+
+**参数：**
+- `topic` (str): 研究主题（例如："CRISPR基因编辑"）
+- `num_papers` (int): 检索论文数量（默认：5）
+- `include_analysis` (bool): 包含深度分析（默认：true）
+- `include_summary` (bool): 包含自动摘要（默认：true）
+
+#### 5. analyze_local_paper
+全面分析本地或在线PDF论文
+
+**参数：**
+- `pdf_path` (str): PDF文件路径（本地或URL）
+- `include_figures` (bool): 分析图表（默认：true）
+- `include_summary` (bool): 生成摘要（默认：true）
+
+#### 6. list_all_figures
+列出PDF论文中的所有图表
+
+**参数：**
+- `pdf_path` (str): PDF文件路径（本地或URL）
+
+#### 7. explain_specific_figure
+解释PDF中的特定图表
+
+**参数：**
+- `pdf_path` (str): PDF文件路径（本地或URL）
+- `figure_number` (int): 图表编号（例如：1、2、3）
+- `provide_context` (bool): 包含上下文段落（默认：true）
+
+#### 8. batch_analyze_local_papers
+批量分析文件夹中的所有PDF论文
+
+**参数：**
+- `folder_path` (str): 文件夹路径
+- `max_papers` (int): 最多分析的论文数量（默认：10）
+- `file_pattern` (str): 文件匹配模式（默认："*.pdf"）
+
+#### 9. compare_papers
+对比多篇论文
+
+**参数：**
+- `paper_ids` (list): 要对比的论文ID列表（2-5篇）
+- `comparison_aspects` (list, 可选): 对比维度 - "methodology"、"findings"、"impact"、"timeline"
 
 ## 📈 使用场景
 

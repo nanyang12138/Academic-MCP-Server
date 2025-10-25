@@ -58,7 +58,12 @@ If you need to set it up on another machine:
 
 ### Configuration for Cursor
 
-Add this configuration to your MCP settings file (`.cursor/mcp.json` or similar):
+This project provides **TWO MCP servers** with complementary features:
+
+1. **`academic`** - Basic search, metadata retrieval, and PDF downloads across 5 databases
+2. **`academic-research`** - Advanced features including citation analysis, paper impact evaluation, local PDF analysis, and complete research workflows
+
+Add this configuration to your MCP settings file (`~/.cursor/mcp.json` or `C:\Users\YOUR_USERNAME\.cursor\mcp.json`):
 
 **Windows:**
 ```json
@@ -68,6 +73,15 @@ Add this configuration to your MCP settings file (`.cursor/mcp.json` or similar)
       "command": "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\venv\\Scripts\\python.exe",
       "args": [
         "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\academic_server.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
+    },
+    "academic-research": {
+      "command": "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\venv\\Scripts\\python.exe",
+      "args": [
+        "C:\\Users\\YOUR_USERNAME\\path\\to\\Academic-MCP-Server\\academic_research_advanced.py"
       ],
       "env": {},
       "disabled": false,
@@ -89,10 +103,21 @@ Add this configuration to your MCP settings file (`.cursor/mcp.json` or similar)
       "env": {},
       "disabled": false,
       "autoApprove": []
+    },
+    "academic-research": {
+      "command": "/path/to/Academic-MCP-Server/venv/bin/python",
+      "args": [
+        "/path/to/Academic-MCP-Server/academic_research_advanced.py"
+      ],
+      "env": {},
+      "disabled": false,
+      "autoApprove": []
     }
   }
 }
 ```
+
+**Note:** Replace `YOUR_USERNAME` and `path/to` with your actual paths.
 
 ## 📖 Usage
 
@@ -179,7 +204,9 @@ deep_paper_analysis(identifier="40883768", source="pubmed")
 
 ## 🛠 MCP Tools Reference
 
-### 1. `search_papers`
+### Server: `academic` (Basic Search & Retrieval)
+
+#### 1. `search_papers`
 Search for papers using keywords.
 
 **Parameters:**
@@ -187,7 +214,7 @@ Search for papers using keywords.
 - `source` (str): "all", "pubmed", "biorxiv", "medrxiv", "arxiv", or "semantic_scholar"
 - `num_results` (int): Number of results per source (default: 10)
 
-### 2. `search_papers_advanced`
+#### 2. `search_papers_advanced`
 Advanced search with multiple filters.
 
 **Parameters:**
@@ -200,29 +227,86 @@ Advanced search with multiple filters.
 - `source` (str): Database source
 - `num_results` (int): Number of results
 
-### 3. `get_paper_metadata`
+#### 3. `get_paper_metadata`
 Get detailed metadata for a specific paper.
 
 **Parameters:**
 - `identifier` (str): Paper ID (PMID, DOI, arXiv ID, etc.)
 - `source` (str): Database source
 
-### 4. `download_paper_pdf`
+#### 4. `download_paper_pdf`
 Download PDF for a paper.
 
 **Parameters:**
 - `identifier` (str): Paper ID
 - `source` (str): Database source
 
-### 5. `list_available_sources`
+#### 5. `list_available_sources`
 List all available databases.
 
-### 6. `deep_paper_analysis`
+#### 6. `deep_paper_analysis`
 Generate comprehensive analysis prompt.
 
 **Parameters:**
 - `identifier` (str): Paper ID
 - `source` (str): Database source
+
+### Server: `academic-research` (Advanced Analysis & Research)
+
+#### 1. `analyze_citation_network`
+Analyze paper's citation network.
+
+**Parameters:**
+- `paper_id` (str): Paper identifier (DOI, PMID, etc.)
+- `source` (str): Data source (default: "semantic_scholar")
+- `max_depth` (int): Network depth 1-3 layers (default: 2)
+
+#### 2. `evaluate_paper_impact`
+Evaluate academic impact of a paper.
+
+**Parameters:**
+- `paper_id` (str): Paper identifier
+- `source` (str): Data source (default: "semantic_scholar")
+
+#### 3. `recommend_related_papers`
+Recommend related papers using multiple strategies.
+
+**Parameters:**
+- `paper_id` (str): Source paper identifier
+- `source` (str): Data source (default: "semantic_scholar")
+- `num_recommendations` (int): Number of recommendations (default: 10)
+- `strategy` (str): "comprehensive", "citations", "similar", or "influential"
+
+#### 4. `research_workflow_complete`
+**⭐ Recommended Core Feature** - Complete research workflow: retrieve → analyze → read → summarize
+
+**Parameters:**
+- `topic` (str): Research topic (e.g., "CRISPR gene editing")
+- `num_papers` (int): Number of papers to retrieve (default: 5)
+- `include_analysis` (bool): Include deep analysis (default: true)
+- `include_summary` (bool): Include auto-summary (default: true)
+
+#### 5. `analyze_local_paper`
+Comprehensively analyze local or online PDF papers.
+
+**Parameters:**
+- `pdf_path` (str): PDF file path (local or URL)
+- `include_figures` (bool): Analyze figures (default: true)
+- `include_summary` (bool): Generate summary (default: true)
+
+#### 6. `list_all_figures`
+List all figures from a PDF paper.
+
+**Parameters:**
+- `pdf_path` (str): PDF file path (local or URL)
+
+#### 7. `explain_specific_figure`
+Explain a specific figure from a PDF.
+
+**Parameters:**
+- `pdf_path` (str): PDF file path (local or URL)
+- `figure_number` (int): Figure number (e.g., 1, 2, 3)
+- `provide_context` (bool): Include context paragraphs (default: true)
 
 ## 📊 Standardized Output Format
 
