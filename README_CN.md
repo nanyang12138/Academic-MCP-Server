@@ -20,6 +20,9 @@
 - ✅ **元数据访问**：获取详细的论文信息
 - ✅ **PDF下载**：下载开放获取的论文
 - ✅ **深度分析**：生成全面的论文分析提示
+- ✅ **本地PDF分析**：支持本地和在线PDF文件分析
+- ✅ **引用网络分析**：分析论文引用关系和影响力
+- ✅ **完整研究工作流**：一键完成检索→分析→阅读→总结
 - ✅ **标准化输出**：所有数据源的一致数据格式
 
 ## 🚀 快速开始
@@ -27,7 +30,7 @@
 ### 前提条件
 
 - Python 3.10+
-- FastMCP库
+- MCP库
 - 互联网连接
 
 ### 安装步骤
@@ -38,6 +41,8 @@
    - Windows: `venv\Scripts\activate`
    - Mac/Linux: `source venv/bin/activate`
 4. 安装依赖：`pip install -r requirements.txt`
+
+**注意：** 所有PubMed功能已完全集成到本地，无需外部依赖！
 
 ### MCP配置
 
@@ -264,20 +269,61 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 - `figure_number` (int): 图表编号（例如：1、2、3）
 - `provide_context` (bool): 包含上下文段落（默认：true）
 
-#### 8. batch_analyze_local_papers
-批量分析文件夹中的所有PDF论文
+#### 8. extract_text_from_pdf
+从PDF提取文本内容（支持本地和在线URL）
+
+**参数：**
+- `pdf_path` (str): PDF路径（本地或URL）
+- `extract_sections` (bool): 是否按章节提取
+- `page_range` (tuple, 可选): 页面范围，如 (1, 10) 表示第1-10页
+
+#### 9. batch_analyze_local_papers
+批量分析文件夹中的所有PDF论文（仅支持本地文件夹）
 
 **参数：**
 - `folder_path` (str): 文件夹路径
 - `max_papers` (int): 最多分析的论文数量（默认：10）
 - `file_pattern` (str): 文件匹配模式（默认："*.pdf"）
 
-#### 9. compare_papers
+#### 10. compare_papers
 对比多篇论文
 
 **参数：**
 - `paper_ids` (list): 要对比的论文ID列表（2-5篇）
 - `comparison_aspects` (list, 可选): 对比维度 - "methodology"、"findings"、"impact"、"timeline"
+
+#### 11. extract_key_information
+从论文中抽取关键信息
+
+**参数：**
+- `paper_id` (str): 论文标识符
+- `source` (str): 数据源（默认："semantic_scholar"）
+- `info_types` (list, 可选): 要抽取的信息类型列表
+  - "methodology": 研究方法
+  - "findings": 主要发现
+  - "limitations": 研究局限
+  - "datasets": 使用的数据集
+  - "metrics": 评估指标
+  - "contributions": 主要贡献
+
+#### 12. generate_paper_summary
+自动生成论文摘要
+
+**参数：**
+- `paper_id` (str): 论文标识符
+- `source` (str): 数据源（默认："semantic_scholar"）
+- `summary_type` (str): 摘要类型
+  - "brief": 简短摘要（100-200字）
+  - "comprehensive": 综合摘要（500-800字）
+  - "technical": 技术细节摘要
+  - "layman": 通俗易懂版本
+
+#### 13. extract_pdf_fulltext
+从PDF中提取全文内容
+
+**参数：**
+- `pdf_url` (str): PDF文件URL
+- `extract_sections` (bool): 是否识别并提取各个章节（默认：true）
 
 ## 📈 使用场景
 
@@ -404,9 +450,10 @@ Academic-MCP-Server/
 ## ⚡ 性能提示
 
 1. **首次搜索较慢** - 各API需要初始化
-2. **指定数据源更快** - 使用具体的 `source` 比 "all" 快
-3. **合理设置结果数** - 建议10-20篇，过多会影响速度
-4. **并发搜索** - "all" 会并行搜索所有数据库
+2. **并发搜索优化** - `source="all"` 现在真正并发搜索所有数据库（使用 `asyncio.gather`）
+3. **超时保护** - 每个数据源有30秒超时限制，避免某个源卡住影响整体
+4. **合理设置结果数** - 建议10-20篇，过多会影响速度
+5. **指定数据源更快** - 如果知道目标数据库，使用具体的 `source` 会更快
 
 ## 🔍 搜索技巧
 
@@ -508,9 +555,10 @@ download_paper_pdf("2303.00456", "arxiv")
 - **数据库数量**：6个（PubMed、bioRxiv、medRxiv、arXiv、Semantic Scholar、Sci-Hub）
 - **MCP服务器数量**：2个（academic、academic-research）
 - **基础MCP工具数量**：6个
-- **高级研究工具数量**：9个
-- **代码行数**：~2000行
-- **支持的文献格式**：PDF、元数据、引用
+- **高级研究工具数量**：15个
+- **代码行数**：~3000行
+- **支持的文献格式**：PDF、元数据、引用、全文分析
+- **PDF支持**：本地文件和在线URL双重支持
 
 ## 💡 使用建议
 

@@ -20,6 +20,9 @@
 - ✅ **Metadata Access**: Retrieve detailed paper information
 - ✅ **PDF Download**: Download open access papers when available
 - ✅ **Deep Analysis**: Generate comprehensive paper analysis prompts
+- ✅ **Local PDF Analysis**: Support for both local and online PDF file analysis
+- ✅ **Citation Network Analysis**: Analyze paper citation relationships and impact
+- ✅ **Complete Research Workflow**: One-click retrieve→analyze→read→summarize
 - ✅ **Standardized Output**: Consistent data format across all sources
 
 ## 🚀 Quick Start
@@ -27,7 +30,7 @@
 ### Prerequisites
 
 - Python 3.10+
-- FastMCP library
+- MCP library
 - Internet connection
 
 ### Installation
@@ -309,6 +312,62 @@ Explain a specific figure from a PDF.
 - `figure_number` (int): Figure number (e.g., 1, 2, 3)
 - `provide_context` (bool): Include context paragraphs (default: true)
 
+#### 8. `extract_text_from_pdf`
+Extract text content from PDF (supports both local and online URLs).
+
+**Parameters:**
+- `pdf_path` (str): PDF path (local or URL)
+- `extract_sections` (bool): Whether to extract by sections
+- `page_range` (tuple, optional): Page range, e.g., (1, 10) for pages 1-10
+
+#### 9. `batch_analyze_local_papers`
+Batch analyze all PDF papers in a folder (local folders only).
+
+**Parameters:**
+- `folder_path` (str): Folder path
+- `max_papers` (int): Maximum number of papers to analyze (default: 10)
+- `file_pattern` (str): File matching pattern (default: "*.pdf")
+
+#### 10. `compare_papers`
+Compare multiple papers.
+
+**Parameters:**
+- `paper_ids` (list): List of paper IDs to compare (2-5 papers)
+- `comparison_aspects` (list, optional): Comparison dimensions - "methodology", "findings", "impact", "timeline"
+
+#### 11. `extract_key_information`
+Extract key information from papers.
+
+**Parameters:**
+- `paper_id` (str): Paper identifier
+- `source` (str): Data source (default: "semantic_scholar")
+- `info_types` (list, optional): List of information types to extract
+  - "methodology": Research methods
+  - "findings": Main findings
+  - "limitations": Study limitations
+  - "datasets": Used datasets
+  - "metrics": Evaluation metrics
+  - "contributions": Main contributions
+
+#### 12. `generate_paper_summary`
+Automatically generate paper summaries.
+
+**Parameters:**
+- `paper_id` (str): Paper identifier
+- `source` (str): Data source (default: "semantic_scholar")
+- `summary_type` (str): Summary type
+  - "brief": Brief summary (100-200 words)
+  - "comprehensive": Comprehensive summary (500-800 words)
+  - "technical": Technical details summary
+  - "layman": Easy-to-understand version
+
+#### 13. `extract_pdf_fulltext`
+Extract full text content from PDF.
+
+**Parameters:**
+- `pdf_url` (str): PDF file URL
+- `extract_sections` (bool): Whether to identify and extract sections (default: true)
+
 ## 📊 Standardized Output Format
 
 All search results return papers in this standardized format:
@@ -334,13 +393,19 @@ Semantic Scholar results include additional fields:
 
 ## 🔧 Architecture
 
-### Adapter Pattern
+### Dual Server Design
 
-Each database is wrapped in an adapter that implements a common interface:
+This project provides **two complementary MCP servers**:
+
+1. **`academic_server.py`** - Core search and retrieval functionality
+2. **`academic_research_advanced.py`** - Advanced analysis and research workflows
+
+### Project Structure
 
 ```
 Academic-MCP-Server/
-├── academic_server.py          # Main MCP server
+├── academic_server.py          # Main MCP server (basic search)
+├── academic_research_advanced.py # Advanced research server
 ├── adapters/                   # Database adapters
 │   ├── base_adapter.py        # Abstract base class
 │   ├── pubmed_adapter.py      # PubMed wrapper
@@ -349,8 +414,15 @@ Academic-MCP-Server/
 │   ├── semantic_scholar_adapter.py
 │   └── scihub_adapter.py      # Sci-Hub
 ├── utils/                      # Helper functions
-└── requirements.txt
+│   ├── helpers.py             # General utilities
+│   └── pubmed_utils.py        # PubMed-specific utilities
+├── requirements.txt           # Dependencies
+└── README.md / README_CN.md   # Documentation
 ```
+
+### Adapter Pattern
+
+Each database is wrapped in an adapter that implements a common interface:
 
 ### Adding New Databases
 
@@ -388,12 +460,17 @@ adapters = {
 - Find papers by specific authors or topics
 - Download open access papers automatically
 - Generate literature review materials
+- Analyze local PDF collections
+- Perform comprehensive citation network analysis
+- Generate automated paper summaries
 
 ### For AI Assistants
 - Access comprehensive academic knowledge
 - Provide up-to-date research information
 - Help with citation and reference management
 - Analyze research trends and findings
+- Process and explain figures from academic papers
+- Conduct complete research workflows automatically
 
 ## ⚠️ Limitations & Notes
 
@@ -410,6 +487,12 @@ adapters = {
 - **arXiv**: All articles are open access
 - **Semantic Scholar**: Depends on publisher policies
 - **Sci-Hub**: Wide coverage of academic papers (use for research purposes only)
+
+### Local PDF Support
+- **Full text extraction**: Extract complete text from local or online PDFs
+- **Figure analysis**: List and explain figures from PDF papers
+- **Section parsing**: Automatically identify and extract paper sections
+- **Batch processing**: Analyze multiple PDFs in a folder simultaneously
 
 ### Date Formats
 - **PubMed**: `YYYY/MM/DD`
@@ -440,6 +523,36 @@ This project builds upon the PubMed-MCP-Server and follows similar open-source p
 ## ⚠️ Disclaimer
 
 The Sci-Hub integration is provided for **research and educational purposes only**. Users are responsible for complying with copyright laws and institutional policies in their jurisdiction. The authors do not endorse or encourage copyright infringement. Please support publishers and authors by obtaining papers through legitimate channels when possible.
+
+## 📊 Project Statistics
+
+- **Supported Databases**: 6 (PubMed, bioRxiv, medRxiv, arXiv, Semantic Scholar, Sci-Hub)
+- **MCP Servers**: 2 (academic, academic-research)
+- **Basic MCP Tools**: 6
+- **Advanced Research Tools**: 15+
+- **Lines of Code**: ~3,000
+- **Supported Formats**: PDF, metadata, citations, full-text analysis
+- **PDF Support**: Both local files and online URLs
+
+## 🚀 Enhanced Features
+
+### Advanced Research Capabilities
+- **Citation Network Analysis**: Understand paper relationships and impact
+- **Automated Summarization**: Generate summaries in multiple styles
+- **Key Information Extraction**: Extract methodology, findings, limitations
+- **Complete Research Workflows**: One-click research from topic to summary
+
+### PDF Processing
+- **Local and Online Support**: Process PDFs from local storage or URLs
+- **Figure Explanation**: AI-powered figure analysis and explanation
+- **Section Recognition**: Automatic identification of paper sections
+- **Batch Analysis**: Process multiple papers simultaneously
+
+### Smart Search Features
+- **Concurrent Database Search**: Search all databases simultaneously
+- **Intelligent Result Merging**: Deduplicate and rank results
+- **Advanced Filtering**: Multi-parameter search with date ranges
+- **Source-Specific Optimization**: Tailored search for each database
 
 ## 📞 Support
 
