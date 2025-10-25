@@ -13,6 +13,7 @@ from adapters.pubmed_adapter import PubMedAdapter
 from adapters.biorxiv_adapter import BioRxivAdapter
 from adapters.arxiv_adapter import ArXivAdapter
 from adapters.semantic_scholar_adapter import SemanticScholarAdapter
+from adapters.scihub_adapter import SciHubAdapter
 
 # Import utilities
 from utils.helpers import merge_results_from_sources
@@ -29,7 +30,8 @@ adapters = {
     "biorxiv": BioRxivAdapter(server="biorxiv"),
     "medrxiv": BioRxivAdapter(server="medrxiv"),
     "arxiv": ArXivAdapter(),
-    "semantic_scholar": SemanticScholarAdapter()  # Add API key if you have one
+    "semantic_scholar": SemanticScholarAdapter(),  # Add API key if you have one
+    "scihub": SciHubAdapter()  # Sci-Hub for comprehensive paper access
 }
 
 AVAILABLE_SOURCES = list(adapters.keys())
@@ -46,7 +48,7 @@ async def search_papers(
     
     Args:
         keywords: Search query string (e.g., "UCAR-T", "machine learning")
-        source: Data source to search. Options: "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"
+        source: Data source to search. Options: "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", "scihub"
         num_results: Number of results to return per source (default: 10)
     
     Returns:
@@ -129,7 +131,7 @@ async def search_papers_advanced(
         start_date: Start date (format varies by source: PubMed uses YYYY/MM/DD, others use YYYY-MM-DD)
         end_date: End date
         term: General search term
-        source: Data source. Options: "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"
+        source: Data source. Options: "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", "scihub"
         num_results: Number of results to return per source
     
     Returns:

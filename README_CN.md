@@ -11,6 +11,7 @@
 - **medRxiv** 💊 - 医学预印本  
 - **arXiv** 🔬 - 物理、数学、计算机科学等预印本
 - **Semantic Scholar** 🤖 - AI驱动的跨学科学术搜索
+- **Sci-Hub** 📚 - 全面的学术论文获取和下载
 
 ### 主要功能
 
@@ -42,7 +43,7 @@
 
 本项目提供**两个MCP服务器**，功能互补：
 
-1. **`academic`** - 基础搜索、元数据检索和PDF下载（5个数据库）
+1. **`academic`** - 基础搜索、元数据检索和PDF下载（6个数据库：PubMed、bioRxiv、medRxiv、arXiv、Semantic Scholar、Sci-Hub）
 2. **`academic-research`** - 高级功能：引用分析、影响力评估、本地PDF分析、完整研究工作流
 
 将以下配置添加到MCP设置文件（`~/.cursor/mcp.json` 或 `C:\Users\YOUR_USERNAME\.cursor\mcp.json`）：
@@ -134,7 +135,7 @@
 
 **参数：**
 - `keywords` (str): 搜索查询词
-- `source` (str): 数据源 - "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"
+- `source` (str): 数据源 - "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", "scihub"
 - `num_results` (int): 每个数据源返回的结果数量（默认：10）
 
 **示例：**
@@ -196,7 +197,7 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 
 **返回：**
 ```python
-["pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"]
+["pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", "scihub"]
 ```
 
 #### 6. deep_paper_analysis
@@ -314,6 +315,7 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 | **medrxiv** | 医学、临床 | 预印本、最新 | 全部开放 |
 | **arxiv** | 物理、数学、CS | 预印本、最新 | 全部开放 |
 | **semantic_scholar** | 全学科 | AI驱动、引用分析 | 取决于来源 |
+| **scihub** | 全学科 | 广泛覆盖、PDF下载 | 全面覆盖 |
 | **all** | 全部 | 一次搜索所有 | 混合 |
 
 ## 📋 返回数据格式
@@ -353,19 +355,18 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 ```
 Academic-MCP-Server/
 ├── academic_server.py          # 主MCP服务器
+├── academic_research_advanced.py # 高级研究服务器
 ├── adapters/                   # 数据库适配器
 │   ├── base_adapter.py        # 抽象基类
 │   ├── pubmed_adapter.py      # PubMed适配器
 │   ├── biorxiv_adapter.py     # bioRxiv/medRxiv
 │   ├── arxiv_adapter.py       # arXiv
-│   └── semantic_scholar_adapter.py
+│   ├── semantic_scholar_adapter.py
+│   └── scihub_adapter.py      # Sci-Hub适配器
 ├── utils/                      # 工具函数
-├── venv/                       # Python虚拟环境
 ├── requirements.txt            # 依赖清单
 ├── README.md                   # 英文文档
-├── README_CN.md                # 本文件
-├── QUICKSTART.md               # 快速入门
-└── test_server.py              # 测试脚本
+└── README_CN.md                # 本文件
 ```
 
 ## 🐛 故障排除
@@ -504,10 +505,11 @@ download_paper_pdf("2303.00456", "arxiv")
 
 ## 📊 统计数据
 
-- **数据库数量**：5个
-- **MCP工具数量**：6个
-- **代码行数**：~1500行
-- **测试覆盖率**：100%
+- **数据库数量**：6个（PubMed、bioRxiv、medRxiv、arXiv、Semantic Scholar、Sci-Hub）
+- **MCP服务器数量**：2个（academic、academic-research）
+- **基础MCP工具数量**：6个
+- **高级研究工具数量**：9个
+- **代码行数**：~2000行
 - **支持的文献格式**：PDF、元数据、引用
 
 ## 💡 使用建议
@@ -531,6 +533,20 @@ download_paper_pdf("2303.00456", "arxiv")
 ```
 在bioRxiv中找最近3个月关于mRNA疫苗的预印本
 ```
+
+## 🙏 致谢
+
+- PubMed-MCP-Server - 原始PubMed集成
+- NCBI E-utilities
+- bioRxiv/medRxiv API
+- arXiv API
+- Semantic Scholar API
+- Sci-Hub MCP Server ([JackKuo666/Sci-Hub-MCP-Server](https://github.com/JackKuo666/Sci-Hub-MCP-Server))
+- FastMCP框架
+
+## ⚠️ 免责声明
+
+Sci-Hub集成**仅供研究和教育目的使用**。用户有责任遵守其所在地区的版权法和机构政策。作者不支持或鼓励侵犯版权。在可能的情况下，请通过合法渠道获取论文以支持出版商和作者。
 
 ---
 

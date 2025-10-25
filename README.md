@@ -11,6 +11,7 @@
 - **medRxiv** 💊 - Medical preprints  
 - **arXiv** 🔬 - Physics, mathematics, computer science, and more
 - **Semantic Scholar** 🤖 - AI-powered academic search across disciplines
+- **Sci-Hub** 📚 - Comprehensive academic paper access and download
 
 ### Core Capabilities
 
@@ -60,7 +61,7 @@ If you need to set it up on another machine:
 
 This project provides **TWO MCP servers** with complementary features:
 
-1. **`academic`** - Basic search, metadata retrieval, and PDF downloads across 5 databases
+1. **`academic`** - Basic search, metadata retrieval, and PDF downloads across 6 databases (PubMed, bioRxiv, medRxiv, arXiv, Semantic Scholar, Sci-Hub)
 2. **`academic-research`** - Advanced features including citation analysis, paper impact evaluation, local PDF analysis, and complete research workflows
 
 Add this configuration to your MCP settings file (`~/.cursor/mcp.json` or `C:\Users\YOUR_USERNAME\.cursor\mcp.json`):
@@ -193,7 +194,7 @@ download_paper_pdf(identifier="2301.00001", source="arxiv")
 
 ```python
 list_available_sources()
-# Returns: ["pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar"]
+# Returns: ["pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", "scihub"]
 ```
 
 ### Deep Paper Analysis
@@ -211,7 +212,7 @@ Search for papers using keywords.
 
 **Parameters:**
 - `keywords` (str): Search query
-- `source` (str): "all", "pubmed", "biorxiv", "medrxiv", "arxiv", or "semantic_scholar"
+- `source` (str): "all", "pubmed", "biorxiv", "medrxiv", "arxiv", "semantic_scholar", or "scihub"
 - `num_results` (int): Number of results per source (default: 10)
 
 #### 2. `search_papers_advanced`
@@ -345,7 +346,8 @@ Academic-MCP-Server/
 │   ├── pubmed_adapter.py      # PubMed wrapper
 │   ├── biorxiv_adapter.py     # bioRxiv/medRxiv
 │   ├── arxiv_adapter.py       # arXiv
-│   └── semantic_scholar_adapter.py
+│   ├── semantic_scholar_adapter.py
+│   └── scihub_adapter.py      # Sci-Hub
 ├── utils/                      # Helper functions
 └── requirements.txt
 ```
@@ -400,12 +402,14 @@ adapters = {
 - **bioRxiv/medRxiv**: No authentication required
 - **arXiv**: Rate-limited (1 request per 3 seconds recommended)
 - **Semantic Scholar**: Free tier has rate limits; get API key for higher limits at https://www.semanticscholar.org/product/api
+- **Sci-Hub**: No authentication required; use responsibly
 
 ### PDF Availability
 - **PubMed**: Only PMC open access articles
 - **bioRxiv/medRxiv**: All articles are open access
 - **arXiv**: All articles are open access
 - **Semantic Scholar**: Depends on publisher policies
+- **Sci-Hub**: Wide coverage of academic papers (use for research purposes only)
 
 ### Date Formats
 - **PubMed**: `YYYY/MM/DD`
@@ -430,7 +434,12 @@ This project builds upon the PubMed-MCP-Server and follows similar open-source p
 - bioRxiv/medRxiv API
 - arXiv API
 - Semantic Scholar API
+- Sci-Hub MCP Server ([JackKuo666/Sci-Hub-MCP-Server](https://github.com/JackKuo666/Sci-Hub-MCP-Server))
 - FastMCP framework
+
+## ⚠️ Disclaimer
+
+The Sci-Hub integration is provided for **research and educational purposes only**. Users are responsible for complying with copyright laws and institutional policies in their jurisdiction. The authors do not endorse or encourage copyright infringement. Please support publishers and authors by obtaining papers through legitimate channels when possible.
 
 ## 📞 Support
 
