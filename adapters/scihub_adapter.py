@@ -232,6 +232,15 @@ class SciHubAdapter(BaseAdapter):
         
         return "N/A"
     
+    def get_source_name(self) -> str:
+        """
+        Get the name of the data source
+        
+        Returns:
+            String name of the database
+        """
+        return self.source_name
+    
     def search_by_title(self, title: str) -> Dict[str, Any]:
         """
         Search for a paper by title using CrossRef + Sci-Hub
